@@ -17,7 +17,7 @@
 <main class="app">
   <section class="hero">
     <div class="row"><div><p>2027 토목기사 필기 준비</p><h1>인강 시간표</h1><p>2과목 × 3일 + 전체 복습</p></div><div class="dday" id="dday">D-<small id="examLabel"></small></div></div>
-    <div class="stats"><div class="stat"><small>시작일</small><b id="startStat"></b></div><div class="stat"><small>선택일 체크</small><b id="todayStat">0/0</b></div><div class="stat"><small>전체 진도</small><b id="allStat">0%</b></div></div>
+    <div class="stats"><div class="stat"><small>시작일</small><b id="startStat"></b></div><div class="stat"><small>선택일 체크</small><b id="todayStat">0/0</b></div><div class="stat"><small>전체 회독 진도</small><b id="allStat">0%</b></div></div>
   </section>
 
   <section id="today" class="view on">
@@ -29,7 +29,7 @@
       <button class="warning-btn" id="postponeBtn" style="width:100%;margin-bottom:10px">이 날짜 일정 전체 미루기</button>
       <div id="todayContent"></div>
     </div>
-    <div class="card"><div class="head"><h2>과목별 진도</h2></div><div id="progress"></div></div>
+    <div class="card"><div class="head"><div><h2>과목별 회독 진도</h2><div class="muted">한 회독이 끝나면 다음 회독 1강부터 자동으로 이어집니다.</div></div></div><div id="progress"></div></div>
   </section>
 
   <section id="schedule" class="view">
@@ -41,23 +41,23 @@
 
   <section id="records" class="view">
     <div class="card"><div class="head"><div><h2>이번 주 공부 통계</h2><div class="muted" id="weekRange"></div></div></div><div class="stats-grid"><div class="stats-box"><small>들은 강의</small><b id="weekLectures">0강</b></div><div class="stats-box"><small>예상 공부시간</small><b id="weekTime">0분</b></div><div class="stats-box"><small>가장 많이 들은 과목</small><b id="weekTop" style="font-size:15px">-</b></div><div class="stats-box"><small>현재 이월 강의</small><b id="overdueCount">0강</b></div></div></div>
-    <div class="card"><div class="head"><div><h2>완강 예상일</h2><div class="muted">현재 강의 수·휴식일 설정 기준</div></div></div><div id="estimates"></div></div>
+    <div class="card"><div class="head"><div><h2>목표 회독 완료 예상일</h2><div class="muted">설정한 회독 수·휴식일 기준</div></div></div><div id="estimates"></div></div>
     <div class="card"><div class="head"><div><h2>과목별 메모</h2><div class="muted">공식, 어려운 부분, 다시 볼 내용 기록</div></div></div><div id="notes"></div></div>
   </section>
 
   <section id="settings" class="view">
-    <div class="card"><div class="head"><div><h2>설정</h2><div class="muted">시험일, 강의 수, 과목 색상, 휴식일</div></div></div>
+    <div class="card"><div class="head"><div><h2>설정</h2><div class="muted">시험일, 강의 수, 목표 회독, 과목 색상, 휴식일</div></div></div>
       <div class="grid"><div class="field"><label>공부 시작일</label><input id="startDate" type="date"></div><div class="field"><label>시험일</label><input id="examDate" type="date"></div></div>
       <div class="field"><label>매주 쉬는 요일</label><div class="rest-days" id="restDays"></div></div>
       <div id="subjectSettings"></div>
       <div class="install-box"><b>홈 화면에 앱 아이콘 추가</b><ol><li>Safari 아래의 공유 버튼 누르기</li><li>‘홈 화면에 추가’ 선택</li><li>오른쪽 위 ‘추가’ 누르기</li></ol><div class="muted">홈 화면에서 일반 앱처럼 열리고, 인터넷이 잠시 끊겨도 최근 화면을 열 수 있어요.</div></div>
-      <div class="notice">체크하지 않은 강의는 다음 공부일에 자동 이월됩니다. 휴식 요일과 ‘일정 미루기’ 날짜는 루틴 일수에서 제외되어, 다음 공부일에 같은 순서가 이어집니다.</div>
+      <div class="notice">각 과목에서 목표 회독 수를 직접 정할 수 있습니다. 1회독 마지막 강의 다음에는 자동으로 2회독 1강부터 이어지고, 회독별 체크 기록은 따로 보관됩니다. 기존 체크 기록은 1회독 기록으로 자동 변환됩니다.</div>
       <div class="actions"><button class="primary" id="saveBtn">설정 저장</button><button class="danger-btn" id="resetBtn">체크 초기화</button></div>
     </div>
   </section>
 </main>
 <nav class="nav"><button class="on" data-v="today">오늘</button><button data-v="schedule">시간표</button><button data-v="records">기록</button><button data-v="settings">설정</button></nav>
 
-<script src="app.js?v=3"></script>
+<script src="app-v4.js?v=4"></script>
 </body>
 </html>
