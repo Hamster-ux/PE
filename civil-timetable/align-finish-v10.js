@@ -1,7 +1,9 @@
 (function(){
-  if(!S.roundDefaultsV10){
-    S.subjects.forEach(s=>s.targetRounds=3);
-    S.roundDefaultsV10=true;
+  if(!S.roundDefaultsV16){
+    S.subjects.forEach(s=>s.targetRounds=1);
+    const struct=S.subjects.find(s=>s.id==='struct');
+    if(struct)struct.theoryTotal=41;
+    S.roundDefaultsV16=true;
   }
   if(typeof S.autoAlignWritten!=='boolean')S.autoAlignWritten=true;
   save();
