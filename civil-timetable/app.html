@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <title>토목기사 인강 시간표</title>
-  <link rel="stylesheet" href="styles.css?v=3">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body>
 <main class="app">
@@ -50,14 +50,52 @@
       <div class="grid"><div class="field"><label>공부 시작일</label><input id="startDate" type="date"></div><div class="field"><label>시험일</label><input id="examDate" type="date"></div></div>
       <div class="field"><label>매주 쉬는 요일</label><div class="rest-days" id="restDays"></div></div>
       <div id="subjectSettings"></div>
-      <div class="install-box"><b>홈 화면에 앱 아이콘 추가</b><ol><li>Safari 아래의 공유 버튼 누르기</li><li>‘홈 화면에 추가’ 선택</li><li>오른쪽 위 ‘추가’ 누르기</li></ol><div class="muted">홈 화면에서 일반 앱처럼 열리고, 인터넷이 잠시 끊겨도 최근 화면을 열 수 있어요.</div></div>
-      <div class="notice"><b>진행 순서</b><br>수리수문·토질·측량 특강 → 필기이론+문제풀이 → 필기 핵심정리 → 실기이론+문제풀이 → 실기 핵심정리. 기출해설과 모의고사는 일정에서 제외했습니다.</div>
+      <div class="install-box"><b>홈 화면에 앱 아이콘 추가</b><ol><li>Safari 아래의 공유 버튼 누르기</li><li>‘홈 화면에 추가’ 선택</li><li>오른쪽 위 ‘추가’ 누르기</li></ol><div class="muted">홈 화면에서 일반 앱처럼 열립니다.</div></div>
+      <div class="notice"><b>진행 순서</b><br>수리수문·토질·측량 특강 → 필기이론+문제풀이 → 필기 핵심정리 → 실기이론+문제풀이 → 실기 핵심정리.</div>
       <div class="actions"><button class="primary" id="saveBtn">설정 저장</button><button class="danger-btn" id="resetBtn">체크 초기화</button></div>
     </div>
   </section>
 </main>
 <nav class="nav"><button class="on" data-v="today">오늘</button><button data-v="schedule">시간표</button><button data-v="records">기록</button><button data-v="settings">설정</button></nav>
-<script src="app-v5.js?v=5"></script>
-<script src="progress-fix-v6.js?v=6"></script>
+
+<script>
+(async function recoverAndStart(){
+  const marker='civil-app-clean-v7';
+  try{
+    if(!sessionStorage.getItem(marker)){
+      sessionStorage.setItem(marker,'1');
+      if('serviceWorker' in navigator){
+        const regs=await navigator.serviceWorker.getRegistrations();
+        await Promise.all(regs.map(r=>r.unregister()));
+      }
+      if('caches' in window){
+        const names=await caches.keys();
+        await Promise.all(names.map(n=>caches.delete(n)));
+      }
+      location.replace('app.html?v=7&clean=1');
+      return;
+    }
+  }catch(e){console.warn('cache cleanup skipped',e)}
+
+  const loadScript=src=>new Promise((resolve,reject)=>{
+    const s=document.createElement('script');
+    s.src=src;
+    s.onload=resolve;
+    s.onerror=reject;
+    document.body.appendChild(s);
+  });
+
+  try{
+    if('serviceWorker' in navigator){
+      try{navigator.serviceWorker.register=()=>Promise.resolve({});}catch(e){}
+    }
+    await loadScript('app-v5.js?v=7');
+    try{await loadScript('progress-fix-v6.js?v=7')}catch(e){console.warn('progress patch skipped',e)}
+  }catch(e){
+    console.error(e);
+    document.getElementById('todayContent').innerHTML='<div class="empty">앱을 불러오지 못했습니다. Safari에서 새로고침해 주세요.</div>';
+  }
+})();
+</script>
 </body>
 </html>
