@@ -11,7 +11,7 @@
   <link rel="apple-touch-icon" href="icon.svg">
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <title>토목기사 인강 시간표</title>
-  <link rel="stylesheet" href="styles.css?v=7">
+  <link rel="stylesheet" href="https://raw.githack.com/Hamster-ux/PE/3d0cfd83161ae489d917a51772b1c224b2c1e57c/civil-timetable/styles.css">
 </head>
 <body>
 <main class="app">
@@ -59,43 +59,15 @@
 <nav class="nav"><button class="on" data-v="today">오늘</button><button data-v="schedule">시간표</button><button data-v="records">기록</button><button data-v="settings">설정</button></nav>
 
 <script>
-(async function recoverAndStart(){
-  const marker='civil-app-clean-v7';
-  try{
-    if(!sessionStorage.getItem(marker)){
-      sessionStorage.setItem(marker,'1');
-      if('serviceWorker' in navigator){
-        const regs=await navigator.serviceWorker.getRegistrations();
-        await Promise.all(regs.map(r=>r.unregister()));
-      }
-      if('caches' in window){
-        const names=await caches.keys();
-        await Promise.all(names.map(n=>caches.delete(n)));
-      }
-      location.replace('app.html?v=7&clean=1');
-      return;
-    }
-  }catch(e){console.warn('cache cleanup skipped',e)}
-
-  const loadScript=src=>new Promise((resolve,reject)=>{
-    const s=document.createElement('script');
-    s.src=src;
-    s.onload=resolve;
-    s.onerror=reject;
-    document.body.appendChild(s);
-  });
-
-  try{
-    if('serviceWorker' in navigator){
-      try{navigator.serviceWorker.register=()=>Promise.resolve({});}catch(e){}
-    }
-    await loadScript('app-v5.js?v=7');
-    try{await loadScript('progress-fix-v6.js?v=7')}catch(e){console.warn('progress patch skipped',e)}
-  }catch(e){
-    console.error(e);
-    document.getElementById('todayContent').innerHTML='<div class="empty">앱을 불러오지 못했습니다. Safari에서 새로고침해 주세요.</div>';
+try{
+  if('serviceWorker' in navigator){
+    navigator.serviceWorker.getRegistrations().then(rs=>rs.forEach(r=>r.unregister())).catch(()=>{});
+    try{navigator.serviceWorker.register=()=>Promise.resolve({});}catch(e){}
   }
-})();
+  if('caches' in window)caches.keys().then(ns=>ns.forEach(n=>caches.delete(n))).catch(()=>{});
+}catch(e){}
 </script>
+<script src="https://raw.githack.com/Hamster-ux/PE/3d0cfd83161ae489d917a51772b1c224b2c1e57c/civil-timetable/app-v5.js"></script>
+<script src="https://raw.githack.com/Hamster-ux/PE/3d0cfd83161ae489d917a51772b1c224b2c1e57c/civil-timetable/progress-fix-v6.js"></script>
 </body>
 </html>
