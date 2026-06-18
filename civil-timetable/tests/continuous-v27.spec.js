@@ -9,6 +9,25 @@ test.beforeEach(async ({ page }) => {
   await expect(page.locator('#appBootV25')).toBeHidden({ timeout: 30_000 });
 });
 
+test('공부 시작일 전에는 어떤 과목도 배정하지 않는다', async ({ page }) => {
+  const result = await page.evaluate(() => {
+    const before = add(date(S.startDate), -1);
+    const plan = scheduledForDate(before);
+    const infoResult = info(before);
+    return {
+      cycle: plan.cycle,
+      items: plan.items.length,
+      infoItems: infoResult.items.length,
+      total: infoResult.total,
+    };
+  });
+
+  expect(result.cycle).toBeNull();
+  expect(result.items).toBe(0);
+  expect(result.infoItems).toBe(0);
+  expect(result.total).toBe(0);
+});
+
 test('복습 날짜 없이 3일 주기로 계속 순환한다', async ({ page }) => {
   const plans = await page.evaluate(() => {
     const start = date(S.startDate);
