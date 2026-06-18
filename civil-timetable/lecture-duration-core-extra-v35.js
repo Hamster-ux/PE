@@ -11,7 +11,13 @@
     'w:soil:core:l3':1860,
     'w:soil:core:l4':1920,
     'w:soil:core:l5':1860,
-    'w:soil:core:l6':1680
+    'w:soil:core:l6':1680,
+    'w:water:core:l1':2400,
+    'w:water:core:l2':2040,
+    'w:water:core:l3':2160,
+    'w:water:core:l4':1980,
+    'w:water:core:l5':1920,
+    'w:water:core:l6':1980
   };
   if(!S.lectureDurations||typeof S.lectureDurations!=='object'||Array.isArray(S.lectureDurations))S.lectureDurations={};
   Object.entries(durations).forEach(([key,value])=>{
