@@ -32,7 +32,7 @@
   async function registerWorker(){
     if(!('serviceWorker'in navigator))return null;
     try{
-      registration=await navigator.serviceWorker.register('./sw.js?v=23',{scope:'./'});
+      registration=await navigator.serviceWorker.register('./sw-v23.js?v=23',{scope:'./'});
       if(registration.waiting&&navigator.serviceWorker.controller)showUpdate(registration);
       registration.addEventListener('updatefound',()=>{
         const worker=registration.installing;
