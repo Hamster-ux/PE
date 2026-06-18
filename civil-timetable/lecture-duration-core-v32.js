@@ -9,7 +9,13 @@
     'w:mech:core:l7':2340,
     'w:mech:core:l8':2400,
     'w:mech:core:l9':2460,
-    'w:mech:core:l10':2460
+    'w:mech:core:l10':2460,
+    'w:survey:core:l1':1860,
+    'w:survey:core:l2':1860,
+    'w:survey:core:l3':1860,
+    'w:survey:core:l4':1860,
+    'w:survey:core:l5':1920,
+    'w:survey:core:l6':1860
   };
   if(!S.lectureDurations||typeof S.lectureDurations!=='object'||Array.isArray(S.lectureDurations))S.lectureDurations={};
   Object.entries(durations).forEach(([key,value])=>{
