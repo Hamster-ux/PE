@@ -1,0 +1,49 @@
+name: Test civil timetable on iPhone WebKit
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'civil-timetable/**'
+      - '.github/workflows/test-civil-timetable-webkit.yml'
+  pull_request:
+    paths:
+      - 'civil-timetable/**'
+      - '.github/workflows/test-civil-timetable-webkit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  iphone-webkit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Playwright
+        run: npm install --no-save @playwright/test
+
+      - name: Install WebKit browser
+        run: npx playwright install --with-deps webkit
+
+      - name: Run iPhone WebKit stability tests
+        run: npx playwright test --config civil-timetable/playwright.config.cjs
+
+      - name: Upload browser test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: civil-timetable-webkit-report
+          path: |
+            civil-timetable/playwright-report
+            civil-timetable/test-results
+          if-no-files-found: ignore
+          retention-days: 14
