@@ -22,26 +22,15 @@
     const used=new Set();
     const grouped=[];
 
-    function add(subject,tasks){
-      let row=grouped.find(item=>item.s.id===subject.id);
-      if(!row){row={s:subject,tasks:[]};grouped.push(row)}
-      row.tasks.push(...tasks);
-    }
-
     for(let slot=0;slot<slots;slot++){
-      let quota=DAILY_CAP;
-      let subject=preferred[slot]&&!used.has(preferred[slot].id)&&!complete(preferred[slot],phase,set)?preferred[slot]:null;
-      while(quota>0){
-        if(!subject)subject=choose(phase,cycle,set,used);
-        if(!subject)break;
-        const tasks=remaining(subject,phase,set).slice(0,Math.min(DAILY_CAP,quota));
-        if(!tasks.length){used.add(subject.id);subject=null;continue}
-        add(subject,tasks);
-        tasks.forEach(task=>set.add(key(subject,task)));
-        used.add(subject.id);
-        quota-=tasks.length;
-        subject=null;
-      }
+      let subject=preferred[slot];
+      if(!subject||used.has(subject.id)||complete(subject,phase,set))subject=choose(phase,cycle,set,used);
+      if(!subject)continue;
+      const tasks=remaining(subject,phase,set).slice(0,DAILY_CAP);
+      if(!tasks.length)continue;
+      grouped.push({s:subject,tasks});
+      tasks.forEach(task=>set.add(key(subject,task)));
+      used.add(subject.id);
     }
     return grouped;
   }
@@ -111,6 +100,6 @@
   };
 
   const notice=document.getElementById('continuousScheduleNoticeV26');
-  if(notice)notice.innerHTML='<b>3일 연속 순환 · 과목별 하루 최대 4강</b><br>복습 전용 날짜 없이 계속 순환합니다. 먼저 끝난 과목의 자리는 아직 남은 다른 과목으로 채우며, 한 과목은 하루 4강을 넘지 않습니다.';
+  if(notice)notice.innerHTML='<b>3일 연속 순환 · 과목별 하루 4강</b><br>복습 전용 날짜 없이 계속 순환합니다. 먼저 끝난 과목의 자리는 아직 남은 다른 과목으로 채우며, 한 과목은 하루 최대 4강만 배정합니다.';
   render();
 })();
