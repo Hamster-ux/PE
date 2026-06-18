@@ -8,9 +8,11 @@
     script.onerror=()=>{console.warn(src+' 불러오기 실패');next&&next()};
     document.body.appendChild(script);
   }
-  load('continuous-schedule-v26.js?v=26',()=>{
-    load('iphone-test-core-v25.js?v=26',()=>{
-      load('iphone-test-ui-v25.js?v=26',finish);
+  load('continuous-schedule-v26.js?v=27',()=>{
+    load('subject-cap-v27.js?v=27',()=>{
+      load('iphone-test-core-v25.js?v=27',()=>{
+        load('iphone-test-ui-v25.js?v=27',finish);
+      });
     });
   });
   setTimeout(finish,12000);
