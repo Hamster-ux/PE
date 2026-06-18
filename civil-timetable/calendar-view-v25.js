@@ -15,16 +15,15 @@
   function shortName(name){const m={'수리수문학':'수리','토질 및 기초':'토질','상하수도공학':'상하수도','측량학':'측량','응용역학':'응용','철근콘크리트 및 강구조':'철콘','토목적산(물량산출)':'적산','토목시공':'시공','토목공정(공정 및 품질관리)':'공정'};return m[name]||name.slice(0,5)}
   function rangeText(tasks){if(!tasks||!tasks.length)return'';const t=tasks[0],a=t.lecture,b=tasks[tasks.length-1].lecture,r=a===b?`${a}강`:`${a}~${b}강`;return t.type==='special'?`특강 ${r}`:t.type==='core'?`핵심 ${r}`:t.phase==='written'?`${t.round||1}회 ${r}`:`이론 ${r}`}
   function projection(end){if(!projectionEnd||end>projectionEnd){projectionMap=projectedPlansUntil(end);projectionEnd=new Date(end)}return projectionMap}
-  function plan(d,today){if(d<=today)return scheduledForDate(d);return projection(d).get(iso(d))||scheduledForDate(d)}
   function events(d,p){if(isRestWeekday(d))return[{kind:'rest',text:'휴식'}];if(isManualPostponed(d))return[{kind:'postponed',text:'일정 미룸'}];if(p.review)return[{kind:'review',text:`${p.phase==='written'?'필기':'실기'} 복습`}];return(p.items||[]).map(x=>({kind:'subject',text:`${shortName(x.s.name)} · ${rangeText(x.tasks)}`,color:x.s.color}))}
   function openDate(key){selectedDate=key;render();document.querySelectorAll('.nav button,.view').forEach(x=>x.classList.remove('on'));const b=document.querySelector('.nav button[data-v="today"]');if(b)b.classList.add('on');$('today').classList.add('on');scrollTo(0,0)}
 
   function hydrate(section){
     if(section.dataset.ready==='1')return;section.dataset.ready='1';
-    const from=date(section.dataset.from),to=date(section.dataset.to),rangeFrom=date(section.dataset.rangeFrom),rangeTo=date(section.dataset.rangeTo),today=date(iso(new Date())),grid=section.querySelector('.calendar-grid');grid.innerHTML='';
+    const from=date(section.dataset.from),to=date(section.dataset.to),rangeFrom=date(section.dataset.rangeFrom),rangeTo=date(section.dataset.rangeTo),today=date(iso(new Date())),grid=section.querySelector('.calendar-grid'),futurePlans=to>today?projection(to):new Map();grid.innerHTML='';
     for(let i=0;i<from.getDay();i++){const e=document.createElement('div');e.className='calendar-day empty';grid.appendChild(e)}
     for(let d=new Date(from);d<=to;d=add(d,1)){
-      const key=iso(d),outside=d<rangeFrom||d>rangeTo,p=outside?{items:[],review:false,phase:'written'}:plan(d,today),ev=outside?[]:events(d,p),cell=document.createElement('div');
+      const key=iso(d),outside=d<rangeFrom||d>rangeTo,p=outside?{items:[],review:false,phase:'written'}:(d>today?(futurePlans.get(key)||scheduledForDate(d)):scheduledForDate(d)),ev=outside?[]:events(d,p),cell=document.createElement('div');
       cell.className='calendar-day '+(key===iso(today)?'today ':'')+(key===selectedDate?'selected ':'')+(outside?'outside ':'')+(isRestWeekday(d)?'rest ':'')+(isManualPostponed(d)?'postponed ':'');cell.innerHTML=`<div class="day-number">${d.getDate()}</div>`;
       ev.slice(0,3).forEach(x=>{const chip=document.createElement('span');chip.className='calendar-event '+x.kind;chip.textContent=x.text;if(x.color){chip.style.background=x.color+'20';chip.style.color=x.color}cell.appendChild(chip)});if(ev.length>3){const more=document.createElement('div');more.className='calendar-more';more.textContent=`+${ev.length-3}개`;cell.appendChild(more)}if(!outside)cell.onclick=()=>openDate(key);grid.appendChild(cell)
     }
