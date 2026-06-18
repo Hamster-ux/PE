@@ -1,0 +1,39 @@
+(function(){
+  const durations={
+    'w:water:theory:r1:l1':2640,
+    'w:water:theory:r1:l2':2880,
+    'w:water:theory:r1:l3':2640,
+    'w:water:theory:r1:l4':2340,
+    'w:water:theory:r1:l5':2220,
+    'w:water:theory:r1:l6':2100,
+    'w:water:theory:r1:l7':2280,
+    'w:water:theory:r1:l8':2520,
+    'w:water:theory:r1:l9':2040,
+    'w:water:theory:r1:l10':2160,
+    'w:water:theory:r1:l11':2040,
+    'w:water:theory:r1:l12':2040,
+    'w:water:theory:r1:l13':2100,
+    'w:water:theory:r1:l14':2040,
+    'w:water:theory:r1:l15':2160,
+    'w:water:theory:r1:l16':2100,
+    'w:water:theory:r1:l17':2400,
+    'w:water:theory:r1:l18':2220,
+    'w:water:theory:r1:l19':2160,
+    'w:water:theory:r1:l20':2100,
+    'w:water:theory:r1:l21':2160,
+    'w:water:theory:r1:l22':2460,
+    'w:water:theory:r1:l23':1920,
+    'w:water:theory:r1:l24':2460,
+    'w:water:theory:r1:l25':2460,
+    'w:water:theory:r1:l26':2040,
+    'w:water:theory:r1:l27':2100,
+    'w:water:theory:r1:l28':1920,
+    'w:water:theory:r1:l29':2040
+  };
+  if(!S.lectureDurations||typeof S.lectureDurations!=='object'||Array.isArray(S.lectureDurations))S.lectureDurations={};
+  Object.entries(durations).forEach(([key,value])=>{
+    if(!Number.isFinite(Number(S.lectureDurations[key])))S.lectureDurations[key]=value;
+  });
+  save();
+  if(typeof render==='function')render();
+})();
