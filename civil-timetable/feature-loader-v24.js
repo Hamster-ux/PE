@@ -11,7 +11,8 @@
     'risk-notify-v20.js?v=24',
     'theme-v21.js?v=24',
     'risk-contrast-v22.js?v=24',
-    'auto-backup-v23.js?v=24'
+    'auto-backup-v23.js?v=24',
+    'home-install-v24.js?v=24'
   ];
 
   async function clearOldWorkers(){
