@@ -28,8 +28,11 @@ async function selectStudyDate(page, value = '2026-07-01') {
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
-    localStorage.clear();
-    sessionStorage.clear();
+    if (sessionStorage.getItem('civilTestInitialized') !== '1') {
+      localStorage.clear();
+      sessionStorage.clear();
+      sessionStorage.setItem('civilTestInitialized', '1');
+    }
   });
 });
 
@@ -99,8 +102,8 @@ test('설정 화면에 백업, 알림, 홈 화면 안내, 상태 점검이 모�
   await expect(page.locator('#homeInstallCardV24')).toBeVisible();
   await expect(page.locator('#healthCardV25')).toBeVisible();
 
+  page.once('dialog', dialog => dialog.accept());
   await page.locator('#backupNowV25').click();
-  await page.getByRole('button', { name: '확인' }).click().catch(() => {});
   const backupCount = await page.evaluate(() => {
     const saved = JSON.parse(localStorage.getItem('civilPlannerAutoBackupsV25') || '[]');
     return saved.length;
