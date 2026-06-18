@@ -1,0 +1,1 @@
+(function(){try{if(location.pathname.endsWith('/app-v25.html'))history.replaceState(null,'',location.pathname.replace(/app-v25\.html$/,''))}catch(e){}})();
