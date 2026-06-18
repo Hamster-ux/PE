@@ -8,6 +8,7 @@
   function remaining(subject,phase,set){return stream(subject,phase).filter(task=>!(set?set.has(key(subject,task)):isTaskChecked(subject,task)))}
   function complete(subject,phase,set){return remaining(subject,phase,set).length===0}
   function phaseComplete(phase,set){return list(phase).every(subject=>complete(subject,phase,set))}
+  function phaseStart(phase){return phase==='written'?date(S.startDate):(S.practicalStartDate?date(S.practicalStartDate):null)}
 
   function choose(phase,cycle,set,used){
     return list(phase).map((subject,index)=>({subject,index,left:remaining(subject,phase,set).length,preferred:subject.day===cycle?1:0}))
@@ -16,6 +17,7 @@
   }
 
   function allocate(phase,cycle,baseSet){
+    if(cycle===null||cycle===undefined)return[];
     const set=baseSet||new Set(Object.keys(S.checks||{}));
     const preferred=list(phase).filter(subject=>subject.day===cycle);
     const slots=Math.max(1,preferred.length);
@@ -46,8 +48,11 @@
 
   scheduledForDate=function(d){
     const phase=phaseForDate(d);
+    const start=phaseStart(phase);
+    if(!start||d<start)return{phase,cycle:null,items:[],review:false};
     if(isSkipped(d))return{phase,cycle:null,items:[],review:false};
     const cycle=phase==='written'?writtenCycle(d):practicalCycle(d);
+    if(cycle===null)return{phase,cycle:null,items:[],review:false};
     const today=date(iso(new Date()));
     if(d<today){const actual=history(d,phase);if(actual.length)return{phase,cycle,items:actual,review:false}}
     return{phase,cycle,items:allocate(phase,cycle),review:false};
@@ -55,6 +60,7 @@
 
   projectedPlansUntil=function(endDate){
     const plans=new Map(),today=date(iso(new Date())),start=today<date(S.startDate)?date(S.startDate):today,set=new Set(Object.keys(S.checks||{}));
+    if(endDate<start)return plans;
     let practicalStart=S.practicalStartDate;
     if(!practicalStart&&phaseComplete('written',set))practicalStart=iso(nextStudyDate(add(start,-1)));
     for(let d=new Date(start);d<=endDate;d=add(d,1)){
@@ -68,7 +74,11 @@
     return plans;
   };
 
-  displayPlanForDate=function(d){const today=date(iso(new Date()));return d<=today?scheduledForDate(d):(projectedPlansUntil(d).get(iso(d))||scheduledForDate(d))};
+  displayPlanForDate=function(d){
+    if(d<date(S.startDate))return{phase:'written',cycle:null,items:[],review:false};
+    const today=date(iso(new Date()));
+    return d<=today?scheduledForDate(d):(projectedPlansUntil(d).get(iso(d))||scheduledForDate(d));
+  };
 
   info=function(d){
     const plan=displayPlanForDate(d),all=plan.items.flatMap(item=>item.tasks.map(task=>({s:item.s,t:task})));
