@@ -1,0 +1,41 @@
+name: Test civil timetable
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'civil-timetable/**'
+      - '.github/workflows/test-civil-timetable.yml'
+  pull_request:
+    paths:
+      - 'civil-timetable/**'
+
+permissions:
+  contents: read
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          find civil-timetable -maxdepth 1 -name '*.js' -print0 | xargs -0 -n1 node --check
+      - name: Check stable app files and required elements
+        run: |
+          node <<'NODE'
+          const fs=require('fs');
+          const path=require('path');
+          const root='civil-timetable';
+          const html=fs.readFileSync(path.join(root,'app-v25.html'),'utf8');
+          const requiredIds=['today','schedule','records','settings','scheduleList','subjectSettings','saveBtn','resetBtn'];
+          for(const id of requiredIds){if(!html.includes(`id="${id}"`))throw new Error(`missing id: ${id}`)}
+          const scripts=[...html.matchAll(/<script src="([^"]+)"/g)].map(m=>m[1].split('?')[0]);
+          for(const file of scripts){if(!fs.existsSync(path.join(root,file)))throw new Error(`missing script: ${file}`)}
+          const index=fs.readFileSync(path.join(root,'index.html'),'utf8');
+          if(!index.includes('app-v25.html')&&!index.includes('app.html'))throw new Error('stable entry is not connected');
+          console.log(`checked ${scripts.length} scripts and ${requiredIds.length} required elements`);
+          NODE
