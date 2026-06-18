@@ -15,7 +15,13 @@
     'w:survey:core:l3':1860,
     'w:survey:core:l4':1860,
     'w:survey:core:l5':1920,
-    'w:survey:core:l6':1860
+    'w:survey:core:l6':1860,
+    'w:hydro:core:l1':1860,
+    'w:hydro:core:l2':1860,
+    'w:hydro:core:l3':1920,
+    'w:hydro:core:l4':1860,
+    'w:hydro:core:l5':1860,
+    'w:hydro:core:l6':1800
   };
   if(!S.lectureDurations||typeof S.lectureDurations!=='object'||Array.isArray(S.lectureDurations))S.lectureDurations={};
   Object.entries(durations).forEach(([key,value])=>{
