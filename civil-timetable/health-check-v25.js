@@ -8,10 +8,14 @@
     script.onerror=()=>{console.warn(src+' 불러오기 실패');next&&next()};
     document.body.appendChild(script);
   }
-  load('continuous-schedule-v26.js?v=27',()=>{
-    load('subject-cap-v27.js?v=27',()=>{
-      load('iphone-test-core-v25.js?v=27',()=>{
-        load('iphone-test-ui-v25.js?v=27',finish);
+  load('continuous-schedule-v26.js?v=28',()=>{
+    load('subject-cap-v27.js?v=28',()=>{
+      load('lecture-duration-v28.js?v=28',()=>{
+        load('ui-overflow-v28.js?v=28',()=>{
+          load('iphone-test-core-v25.js?v=28',()=>{
+            load('iphone-test-ui-v25.js?v=28',finish);
+          });
+        });
       });
     });
   });
