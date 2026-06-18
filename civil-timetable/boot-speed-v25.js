@@ -1,0 +1,1 @@
+(function(){const base=render;let boot=true,queued=false;render=function(){if(!boot)return base();if(!queued){queued=true;setTimeout(function(){boot=false;queued=false;render()},0)}}})();
