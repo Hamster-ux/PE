@@ -1,0 +1,51 @@
+(function(){
+  const durations={
+    'w:struct:theory:r1:l1':1680,
+    'w:struct:theory:r1:l2':1620,
+    'w:struct:theory:r1:l3':1920,
+    'w:struct:theory:r1:l4':1740,
+    'w:struct:theory:r1:l5':1800,
+    'w:struct:theory:r1:l6':1620,
+    'w:struct:theory:r1:l7':1860,
+    'w:struct:theory:r1:l8':1320,
+    'w:struct:theory:r1:l9':1740,
+    'w:struct:theory:r1:l10':1920,
+    'w:struct:theory:r1:l11':2040,
+    'w:struct:theory:r1:l12':1620,
+    'w:struct:theory:r1:l13':2160,
+    'w:struct:theory:r1:l14':1980,
+    'w:struct:theory:r1:l15':1560,
+    'w:struct:theory:r1:l16':2700,
+    'w:struct:theory:r1:l17':2040,
+    'w:struct:theory:r1:l18':2280,
+    'w:struct:theory:r1:l19':1620,
+    'w:struct:theory:r1:l20':1800,
+    'w:struct:theory:r1:l21':1620,
+    'w:struct:theory:r1:l22':1860,
+    'w:struct:theory:r1:l23':1800,
+    'w:struct:theory:r1:l24':1680,
+    'w:struct:theory:r1:l25':1560,
+    'w:struct:theory:r1:l26':1500,
+    'w:struct:theory:r1:l27':1620,
+    'w:struct:theory:r1:l28':1440,
+    'w:struct:theory:r1:l29':1380,
+    'w:struct:theory:r1:l30':1800,
+    'w:struct:theory:r1:l31':2160,
+    'w:struct:theory:r1:l32':1860,
+    'w:struct:theory:r1:l33':1740,
+    'w:struct:theory:r1:l34':1560,
+    'w:struct:theory:r1:l35':1980,
+    'w:struct:theory:r1:l36':1980,
+    'w:struct:theory:r1:l37':2040,
+    'w:struct:theory:r1:l38':2040,
+    'w:struct:theory:r1:l39':1980,
+    'w:struct:theory:r1:l40':1980,
+    'w:struct:theory:r1:l41':1800
+  };
+  if(!S.lectureDurations||typeof S.lectureDurations!=='object'||Array.isArray(S.lectureDurations))S.lectureDurations={};
+  Object.entries(durations).forEach(([key,value])=>{
+    if(!Number.isFinite(Number(S.lectureDurations[key])))S.lectureDurations[key]=value;
+  });
+  save();
+  if(typeof render==='function')render();
+})();
