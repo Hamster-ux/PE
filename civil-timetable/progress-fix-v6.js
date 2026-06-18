@@ -1,4 +1,6 @@
-/* v6: 다음 과정 자동 연결 및 미래 시간표 예측 수정 */
+/* v25: 다음 과정 자동 연결, 미래 예측, 시작 렌더링 최적화 */
+const __coreRenderV25=render;let __bootingV25=true,__queuedV25=false;
+render=function(){if(!__bootingV25)return __coreRenderV25();if(!__queuedV25){__queuedV25=true;setTimeout(()=>{__bootingV25=false;__queuedV25=false;render()},0)}};
 function taskStream(s,phase){return phase==='written'?writtenTasks(s):practicalTasks(s)}
 function taskSegmentKey(t){return`${t.phase}:${t.type}:${t.round||1}`}
 function nextUncheckedTasks(s,phase,checkedSet=null){
@@ -92,5 +94,4 @@ plannedFinishDate=function(s,phase){
 };
 hasAnyChecksForDate=function(d){const plan=displayPlanForDate(d);if(plan.review)return reviewSubjects(plan.phase).some(s=>S.reviews[`${plan.phase}:${iso(d)}:${s.id}`]);return plan.items.some(x=>x.tasks.some(t=>isTaskChecked(x.s,t)))};
 $('showSchedule').onclick=schedule;
-if('serviceWorker'in navigator)navigator.serviceWorker.register('sw.js?v=6').catch(()=>{});
 render();
