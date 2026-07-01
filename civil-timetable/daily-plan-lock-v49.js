@@ -159,15 +159,29 @@
   };
 
   plannedFinishDate=function(subject,phase){
-    const stream=tasksFor(subject,phase),subjectKeys=stream.map(task=>keyFor(subject,task));
-    const checked=new Set(Object.keys(S.checks||{}));
-    if(subjectKeys.every(key=>checked.has(key)))return'완료';
-    const start=date(todayKey())<date(S.startDate)?date(S.startDate):date(todayKey());
-    const far=add(start,4000),plans=projectedPlansUntil(far);
-    for(let d=new Date(start);d<=far;d=add(d,1)){
-      const plan=plans.get(iso(d));
-      if(plan)plan.items.forEach(group=>group.tasks.forEach(task=>checked.add(keyFor(group.s,task))));
-      if(subjectKeys.every(key=>checked.has(key)))return fmt(d);
+    const subjectKeys=tasksFor(subject,phase).map(task=>keyFor(subject,task));
+    const set=new Set(Object.keys(S.checks||{}));
+    if(subjectKeys.every(key=>set.has(key)))return'완료';
+
+    const today=date(todayKey());
+    const start=today<date(S.startDate)?date(S.startDate):today;
+    let practicalStart=S.practicalStartDate;
+    if(!practicalStart&&phaseComplete('written',set))practicalStart=iso(nextStudyDate(add(start,-1)));
+
+    for(let i=0,d=new Date(start);i<4000;i++,d=add(d,1)){
+      if(isSkipped(d))continue;
+      const currentPhase=practicalStart&&d>=date(practicalStart)?'practical':'written';
+      const index=currentPhase==='written'?activeIndex(d,S.startDate):activeIndex(d,practicalStart);
+      const cycle=index===null?null:index%CYCLE_DAYS;
+      if(iso(d)===todayKey()){
+        const frozen=buildTodayPlan(d);
+        if(frozen.phase===currentPhase)frozen.items.forEach(group=>group.tasks.forEach(task=>set.add(keyFor(group.s,task))));
+        else allocate(currentPhase,cycle,set);
+      }else{
+        allocate(currentPhase,cycle,set);
+      }
+      if(currentPhase==='written'&&!practicalStart&&phaseComplete('written',set))practicalStart=iso(nextStudyDate(d));
+      if(subjectKeys.every(key=>set.has(key)))return fmt(d);
     }
     return'계산 불가';
   };
