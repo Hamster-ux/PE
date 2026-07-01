@@ -5,7 +5,7 @@
 
   if(!S.dailyPlanSnapshots||typeof S.dailyPlanSnapshots!=='object'||Array.isArray(S.dailyPlanSnapshots))S.dailyPlanSnapshots={};
 
-  function todayKey(){return iso(new Date())}
+  function todayKey(){return window.civilStudyDayKey?window.civilStudyDayKey():iso(new Date())}
   function subjectsFor(phase){return phase==='written'?S.subjects:S.practicalSubjects}
   function tasksFor(subject,phase){return phase==='written'?writtenTasks(subject):practicalTasks(subject)}
   function keyFor(subject,task){return taskKey(subject,task)}
